@@ -1,12 +1,27 @@
+#!/usr/bin/env ansible-playbook --inventory vagrant.local.rf29.net,
 ---
 - hosts: all
   vars:
-    dotfiles: []
+    user: tswift
+
+    oh_my_zsh_repo: https://github.com/schlueter/oh-my-zsh.git
+    oh_my_zsh_repo_branch: feature/blusch-theme
+
+    dotfiles_user: tswift
+    dotfiles: [ zshrc ]
     dotfile_urls:
-    - https://raw.githubusercontent.com/schlueter/dotfiles/c78722da0410929a777d29b1185e94063ce38c7e/.zshrc
-    - https://raw.githubusercontent.com/schlueter/dotfiles/e0bbaa5e01ce2843d08a23c8ad1578cc7106c37a/.vimrc
+    - https://raw.githubusercontent.com/tswift13/dotfiles/master/aliases
+    - https://raw.githubusercontent.com/tswift13/dotfiles/master/vimrc
 
   roles:
   - user-dotfiles
-  # - vim-vundle
+  - vim-vundle
   - oh-my-zsh
+  - hub
+
+  tasks:
+  - name: Add alias so that emoji will display with ls
+    lineinfile:
+      dest=~/.aliases
+    args:
+      line: alias ls='ls --show-control-chars'
